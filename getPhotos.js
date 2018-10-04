@@ -3,16 +3,25 @@ const fs = require("fs");
 
 const OPTIONS = {
   numItems: 100,
-  width: 600,
-  height: 600,
+  width: 300,
+  height: 300,
   collectionId: 311028
 };
 
 const BASE_URL = `https://source.unsplash.com/collection`;
 
+async function getUnsplashItImage(options, i) {
+  return `https://unsplash.it/${options.width}/${
+    options.height
+  }/?random&__id=album${i}`;
+}
+
 async function getUnsplashImage(options) {
+  const randomNum = Math.floor(Math.random() * options.numItems);
   const res = await fetch(
-    `${BASE_URL}/${options.collectionId}/${options.width}x${options.height}`
+    `${BASE_URL}/${options.collectionId}/${options.width}x${
+      options.height
+    }/?sig=${randomNum}`
   );
 
   return res.url;
@@ -21,7 +30,8 @@ async function getUnsplashImage(options) {
 (async function generatePhotos(OPTIONS) {
   const photos = [];
   for (let i = 0; i < OPTIONS.numItems; i++) {
-    const url = await getUnsplashImage(OPTIONS);
+    const url = await getUnsplashItImage(OPTIONS, i);
+
     photos.push({
       id: i,
       url
@@ -33,6 +43,7 @@ async function getUnsplashImage(options) {
   };
 
   fs.writeFileSync("photos.json", JSON.stringify(photos, null, 2));
+  console.log("done");
 
-  return images;
+  return photos;
 })(OPTIONS);
