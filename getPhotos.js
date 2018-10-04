@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 const fs = require("fs");
 
 const OPTIONS = {
-  numItems: 100,
+  numItems: 40,
   width: 300,
   height: 300,
   collectionId: 311028
